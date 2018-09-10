@@ -51,6 +51,9 @@ function startGame() {
 
 function update() {
   camera.update()
+
+  this.hud.setLives(this.player.life)
+
   draw()
 }
 

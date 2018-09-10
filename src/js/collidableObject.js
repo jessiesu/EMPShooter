@@ -1,8 +1,9 @@
 class CollidableObject {
-  constructor(position, rectangle, moveable) {
+  constructor(position, rectangle, type, moveable) {
     this.position = position
     this.rectangle = rectangle
     this.moveable = moveable
+    this.type = type
 
     this.initialSpeed = 0
     this.mass = 1.5
@@ -14,7 +15,6 @@ class CollidableObject {
     this.minVel = { x: -300, y: -500 }
 
     this.interactionDir = { x: 0, y: 0 }
-
     this.collisionOffset = ZERO_VECTOR
 
     this.debugColor = 'green'

@@ -64,6 +64,7 @@ class Map {
           var collidable = new CollidableObject(
              position,
              rect,
+             WALL,
              false
           )
           collidable.setDebugColor('red')

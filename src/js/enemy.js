@@ -1,7 +1,7 @@
 class Enemy extends CollidableObject {
   constructor(position) {
     var rect = new Rectangle(position.x - (TILE / 2), position.y - (TILE / 2), TILE, TILE)
-    super(position, rect, false)
+    super(position, rect, ENEMY, false)
 
     this.position = position
     this.sprite = new Sprite(ctx, "assets/img/sprites.png")

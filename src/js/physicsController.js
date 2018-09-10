@@ -107,7 +107,7 @@ class PhysicsController {
               }
             }
 
-            physicsObject.setInteractedWith(interaction)
+            physicsObject.setInteractedWith(interaction.type)
           }
         })
         if (!hCollision) {

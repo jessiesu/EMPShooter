@@ -1,7 +1,7 @@
 class Player extends CollidableObject {
   constructor(position, life, speed) {
     var rect = new Rectangle(position.x - (PLAYER_HITBOX / 2), position.y - (PLAYER_HITBOX / 2), PLAYER_HITBOX, PLAYER_HITBOX)
-    super(position, rect, true)
+    super(position, rect, PLAYER, true)
 
     this.startPos = position
     this.state = PLAYER_FALLING
@@ -16,6 +16,10 @@ class Player extends CollidableObject {
     this.sprite = new Sprite(ctx, 'assets/img/sprites.png')
     this.sprite.setTile(this.getSprite())
 
+    this.isRecovering = false
+    this.recoverTimer = 1000 // ms
+    this.recovered = 0
+
     this.setDebugColor('blue')
   }
 
@@ -23,6 +27,7 @@ class Player extends CollidableObject {
     if (this.life > 0) {
       this.life--
     }
+    this.isRecovering = true
   }
 
   update(dt) {
@@ -39,6 +44,14 @@ class Player extends CollidableObject {
       this.state = PLAYER_STATIC
     }
 
+    if (this.isRecovering) {
+      this.recovered += dt
+      if (this.recovered >= this.recoverTimer) {
+        this.isRecovering = false
+        this.recovered = 0
+      }
+    }
+
     this.updateSprite()
   }
 
@@ -50,6 +63,13 @@ class Player extends CollidableObject {
 
     this.sprite.setPosition(position)
     this.sprite.draw()
+  }
+
+  setInteractedWith(type) {
+    super.setInteractedWith(type)
+    if (this.interactedWith == ENEMY && !this.isRecovering) {
+      this.takeDamage()
+    }
   }
 
   jump() {
