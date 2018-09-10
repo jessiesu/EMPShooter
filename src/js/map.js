@@ -5,7 +5,7 @@ var WIN_TILE = 4
 class Map {
   constructor(level) {
     this.level = level
-    this.mapAsset = createSprite("assets/img/sprites.png")
+    this.mapSprite = new Sprite(ctx, "assets/img/sprites.png")
 
     this.data = level_1
 
@@ -14,6 +14,31 @@ class Map {
     this.playerPos = null
 
     this.initialize()
+  }
+
+  draw() {
+    var wall = { x: 0, y: TILE }
+    var sky = { x: TILE, y: TILE }
+
+    var viewport = camera.getViewport()
+    // draw only visible tiles
+    var startCol = clamp(Math.floor(viewport.left / TILE) - 1, 0, map.width)
+    var startRow = clamp(Math.floor(viewport.top / TILE) - 1, 0, map.height)
+    var endCol = clamp(Math.ceil(viewport.right / TILE) + 1, 0, map.width)
+    var endRow = clamp(Math.ceil(viewport.bottom / TILE) + 1, 0, map.height)
+
+    for(var i = startRow; i < endRow; i++) {
+      for(var j = startCol; j < endCol; j++) {
+        if (map.data[i][j] != WALL_TILE) {
+          this.mapSprite.setTile(sky)
+        }
+        else {
+          this.mapSprite.setTile(wall)
+        }
+        this.mapSprite.setPosition({x: (j*TILE) - viewport.left, y: (i*TILE) - viewport.top})
+        this.mapSprite.draw()
+      }
+    }
   }
 
   getTileFromCoordinates(x, y) {

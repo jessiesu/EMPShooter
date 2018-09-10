@@ -13,8 +13,8 @@ class Player extends CollidableObject {
     this.moving = false
     this.destination = position
 
-    this.spriteAsset = createSprite("assets/img/sprites.png")
-    this.sprite = this.getSprite()
+    this.sprite = new Sprite(ctx, 'assets/img/sprites.png')
+    this.sprite.setTile(this.getSprite())
   }
 
   takeDamage() {
@@ -40,6 +40,16 @@ class Player extends CollidableObject {
     this.updateSprite()
   }
 
+  draw() {
+    var position = {}
+    position.x = player.position.x - HALF_TILE
+    position.y = player.position.y - HALF_TILE
+    position = camera.getWorldToScreenPos(position.x, position.y)
+
+    this.sprite.setPosition(position)
+    this.sprite.draw()
+  }
+
   jump() {
     this.state = PLAYER_JUMPING
     this.canJump = false
@@ -52,7 +62,7 @@ class Player extends CollidableObject {
   }
 
   updateSprite() {
-    this.sprite = this.getSprite()
+    this.sprite.setTile(this.getSprite())
   }
 
   getSprite() {
@@ -71,6 +81,5 @@ class Player extends CollidableObject {
 
     // default
     return { x: 0 * TILE, y: 0 * TILE}
-
   }
 }

@@ -19,13 +19,7 @@ document.addEventListener("keyup", keyUp)
 var physicsController = new PhysicsController()
 
 function startGame() {
-  map = new Map(1)
-  player = new Player(map.playerPos || { x: 190, y: 60 }, 3, 2.5 / SCALE)
-  camera = new Camera(0, 0, CANVAS_W, CANVAS_H, map.width * TILE, map.height * TILE, SCALE)
-  camera.setDeadZone(CANVAS_W / 2, CANVAS_H / 2)
-  camera.follow(player)
-  hud = new Hud(player.life, CANVAS_W, CANVAS_H)
-
+  // Canvas
   canvas = document.getElementById('gameCanvas')
   canvas.width = CANVAS_W
   canvas.height = CANVAS_H
@@ -33,6 +27,13 @@ function startGame() {
   ctx.scale(SCALE,SCALE)
   ctx.mozImageSmoothingEnabled = false
   ctx.imageSmoothingEnabled = false
+
+  map = new Map(1)
+  player = new Player(map.playerPos || { x: 190, y: 60 }, 3, 2.5 / SCALE)
+  camera = new Camera(0, 0, CANVAS_W, CANVAS_H, map.width * TILE, map.height * TILE, SCALE)
+  camera.setDeadZone(CANVAS_W / 2, CANVAS_H / 2)
+  camera.follow(player)
+  hud = new Hud(player.maxLife, CANVAS_W, CANVAS_H)
 
   setInterval(update, 10)
 
@@ -55,10 +56,12 @@ function updatePhysics() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H)
 
-  drawMap(WALL_TILE)
-  drawPlayer()
-  drawHUD()
+  this.map.draw()
+  player.draw()
+  this.hud.draw()
 
   if (gameState == STATE_INTRO) {
   }
@@ -68,55 +71,6 @@ function draw() {
   }
 
   physicsController.draw()
-}
-
-function drawPlayer() {
-  var position = {}
-  position.x = player.position.x - HALF_TILE
-  position.y = player.position.y - HALF_TILE
-  position = camera.getWorldToScreenPos(position.x, position.y)
-
-  ctx.drawImage(player.spriteAsset, player.sprite.x, player.sprite.y, TILE, TILE, position.x, position.y, TILE, TILE)
-}
-
-function drawMap(tileType) {
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H)
-
-  var wall = { x: 3*TILE, y: 0*TILE }
-  var win = { x: 1*TILE, y: 1*TILE }
-
-  var viewport = camera.getViewport()
-  // draw only visible tiles
-  var startCol = clamp(Math.floor(viewport.left / TILE) - 1, 0, map.width)
-  var startRow = clamp(Math.floor(viewport.top / TILE) - 1, 0, map.height)
-  var endCol = clamp(Math.ceil(viewport.right / TILE) + 1, 0, map.width)
-  var endRow = clamp(Math.ceil(viewport.bottom / TILE) + 1, 0, map.height)
-
-  for(var i = startRow; i < endRow; i++) {
-    for(var j = startCol; j < endCol; j++) {
-      if (map.data[i][j] != WALL_TILE) {
-        ctx.drawImage(map.mapAsset, TILE, TILE, TILE, TILE, (j*TILE) - viewport.left, (i*TILE) - viewport.top, TILE, TILE)
-      }
-      else {
-        ctx.drawImage(map.mapAsset, 0, TILE, TILE, TILE, (j*TILE) - viewport.left, (i*TILE) - viewport.top, TILE, TILE)
-      }
-    }
-  }
-}
-
-function drawHUD() {
-  var life = hud.getTileImage('life')
-  var emptyLife = hud.getTileImage('emptyLife')
-  var lifeBarPos = hud.getLifeBarPos()
-  for (var i = 0; i < player.maxLife; i++) {
-    if (i < player.life) {
-      ctx.drawImage(hud.spriteAsset, life.x, life.y, life.width, life.height, lifeBarPos.x + (i * TILE / 2), lifeBarPos.y, life.width / 2, life.height / 2)
-    }
-    else {
-      ctx.drawImage(hud.spriteAsset, emptyLife.x, emptyLife.y, emptyLife.width, emptyLife.height, lifeBarPos.x + (i * TILE / 2), lifeBarPos.y, emptyLife.width / 2, emptyLife.height / 2)
-    }
-  }
 }
 
 function clamp(num, min, max) {
