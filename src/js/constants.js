@@ -1,8 +1,8 @@
-var DEBUG = 0
-var SCALE = 4
+var DEBUG = 1
+var SCALE = 3
 var TILE = 16
 var HALF_TILE = TILE / 2
-var PLAYER_HITBOX = 13
+var PLAYER_HITBOX = 14
 var CANVAS_W = window.innerWidth;
 var CANVAS_H = window.innerHeight;
 var OFFSCREEN = { x: -100, y: -100 }
@@ -23,3 +23,4 @@ var WALL = 'wall'
 var PLAYER = 'player'
 var ENEMY = 'enemy'
 var BULLET = 'bullet'
+var NONE = 'none'

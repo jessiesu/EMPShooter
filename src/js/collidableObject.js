@@ -18,6 +18,8 @@ class CollidableObject {
     this.collisionOffset = ZERO_VECTOR
 
     this.debugColor = 'green'
+
+    this.interactedWith = 'NONE'
   }
 
   update(dt) {
@@ -68,11 +70,12 @@ class CollidableObject {
 
   drawDebug() {
     if (ctx) {
+      var viewport = camera.getViewport()
       ctx.beginPath()
       ctx.lineWidth="1"
       ctx.rect(
-        this.rectangle.left,
-        this.rectangle.top,
+        this.rectangle.left - viewport.left,
+        this.rectangle.top - viewport.top,
         this.rectangle.width,
         this.rectangle.height
       )
@@ -133,5 +136,10 @@ class CollidableObject {
   setYInteraction(dir, diff) {
     this.interactionDir.y = dir
     this.collisionOffset.y = diff
+  }
+
+  setInteractedWith(type) {
+    this.interactedWith = type
+    console.log('interacted with type ' + type)
   }
 }

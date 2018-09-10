@@ -1,6 +1,7 @@
 var canvas
 var ctx
 var player
+var enemy
 var map
 var camera
 var hud
@@ -29,7 +30,8 @@ function startGame() {
   ctx.imageSmoothingEnabled = false
 
   map = new Map(1)
-  player = new Player(map.playerPos || { x: 190, y: 60 }, 3, 2.5 / SCALE)
+  player = new Player({...map.playerPos} || { x: 190, y: 60 }, 3, 2.5 / SCALE)
+  enemy = new Enemy({ x: 60, y: 300 })
   camera = new Camera(0, 0, CANVAS_W, CANVAS_H, map.width * TILE, map.height * TILE, SCALE)
   camera.setDeadZone(CANVAS_W / 2, CANVAS_H / 2)
   camera.follow(player)
@@ -38,7 +40,9 @@ function startGame() {
   setInterval(update, 10)
 
   physicsController.addToPool(PLAYER, player)
+  physicsController.addToPool(ENEMY, enemy)
   physicsController.setInteraction(PLAYER, WALL)
+  physicsController.setInteraction(PLAYER, ENEMY)
 
   setInterval(updatePhysics, 2)
 
@@ -61,7 +65,9 @@ function draw() {
 
   this.map.draw()
   player.draw()
+  enemy.draw()
   this.hud.draw()
+  physicsController.draw()
 
   if (gameState == STATE_INTRO) {
   }
@@ -69,8 +75,6 @@ function draw() {
   }
   else if (gameState == STATE_OUTRO) {
   }
-
-  physicsController.draw()
 }
 
 function clamp(num, min, max) {

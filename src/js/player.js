@@ -15,6 +15,8 @@ class Player extends CollidableObject {
 
     this.sprite = new Sprite(ctx, 'assets/img/sprites.png')
     this.sprite.setTile(this.getSprite())
+
+    this.setDebugColor('blue')
   }
 
   takeDamage() {
