@@ -46,6 +46,8 @@ function startGame() {
 
   setInterval(updatePhysics, 2)
 
+  enemy.setTarget(player)
+
   lockInput(true)
 }
 
@@ -54,6 +56,9 @@ function update() {
 
   this.hud.setLives(this.player.life)
 
+  if (physicsController.raycastIntersection(enemy, player, WALL)) {
+    console.log('can see player')
+  }
   draw()
 }
 
@@ -105,11 +110,9 @@ function keyUp(event) {
   switch (event.key) {
     case 'a':
       player.stop()
-      console.log('stop')
       break;
     case 'd':
       player.stop()
-      console.log('stop')
       break;
   }
 }

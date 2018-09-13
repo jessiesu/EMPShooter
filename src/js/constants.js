@@ -12,6 +12,8 @@ var STATE_PLAY = 2
 var STATE_END = 3
 var STATE_OUTRO = 4
 
+var BULLET_SIZE = 3
+
 // Player
 var PLAYER_STATIC = 0
 var PLAYER_JUMPING = 1

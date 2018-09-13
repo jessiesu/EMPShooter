@@ -9,10 +9,12 @@ class CollidableObject {
     this.mass = 1.5
     this.gravity = 980
     this.xAcc = 0
+    this.yAcc = 0
     this.friction = 500
     this.velocity = { x: 0, y: 0 }
     this.maxVel = { x: 300, y: 500 }
     this.minVel = { x: -300, y: -500 }
+    this.hasGravity = true
 
     this.interactionDir = { x: 0, y: 0 }
     this.collisionOffset = ZERO_VECTOR
@@ -25,11 +27,14 @@ class CollidableObject {
   update(dt) {
     if (this.moveable) {
       dt = dt / 1000
-      this.applyGravity(dt)
+      if (this.hasGravity) {
+        this.applyGravity(dt)
+      }
       this.applyFriction(dt)
 
       var newPos = this.position
       this.velocity.x += (this.xAcc * this.mass) * dt
+      this.velocity.y += (this.yAcc * this.mass) * dt
 
       if (this.interactionDir.x == -1) {
         this.velocity.x = clamp(this.velocity.x, 0, this.maxVel.x)
@@ -85,6 +90,14 @@ class CollidableObject {
     }
   }
 
+  enableGravity() {
+    this.hasGravity = true
+  }
+
+  disableGravity() {
+    this.hasGravity = false
+  }
+
   setPosition(position) {
     this.position = position
     this.rectangle.setPosition(position)
@@ -117,10 +130,15 @@ class CollidableObject {
     }
   }
 
-  setXAcc(acc) {
-    this.xAcc = acc
+  setAcc(x, y) {
+    this.xAcc = x
+    this.yAcc = y
+  }
+
+  setXAcc(xAcc) {
+    this.xAcc = xAcc
     if (this.velocity.x == 0) {
-      this.velocity.x = this.initialSpeed * Math.sign(acc)
+      this.velocity.x = this.initialSpeed * Math.sign(xAcc)
     }
   }
 
@@ -140,6 +158,5 @@ class CollidableObject {
 
   setInteractedWith(type) {
     this.interactedWith = type
-    console.log('interacted with type ' + type)
   }
 }

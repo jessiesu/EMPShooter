@@ -54,6 +54,26 @@ class PhysicsController {
     }
   }
 
+  raycastIntersection(source, target, blockingType) {
+    var hasIntersection = false
+    for (var key in this.physicsPool) {
+      if (key == source.type) {
+        continue
+      }
+      this.physicsPool[key].forEach(obj => {
+        if (obj.rectangle.intersectsLine(source.rectangle.center, target.rectangle.center)) {
+          if (obj.type == target.type) {
+            hasIntersection = true
+          }
+          else if (obj.type == blockingType) {
+            hasIntersection = false
+          }
+        }
+      })
+    }
+    return hasIntersection
+  }
+
   draw() {
     if (DEBUG) {
       for (var key in this.physicsPool) {
