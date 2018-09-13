@@ -26,8 +26,13 @@ class Enemy extends CollidableObject {
     position = camera.getWorldToScreenPos(position.x, position.y)
 
     this.sprite.setPosition(position)
-
     this.sprite.draw()
+
+    this.bulletPool.forEach(bullet => {
+      if (!bullet.deleted) {
+        bullet.draw()
+      }
+    })
   }
 
   update(dt) {
@@ -40,13 +45,6 @@ class Enemy extends CollidableObject {
         this.shootTarget()
       }
     }
-
-    var i = this.bulletPool.length
-    while (i--) {
-      if (this.bulletPool[i].interactedWith == WALL) {
-        this.bulletPool.splice(i, 1)
-      }
-    }
   }
 
   setTarget(target) {
@@ -55,8 +53,8 @@ class Enemy extends CollidableObject {
 
   shootTarget() {
     if (this.target) {
-      var pos = camera.getWorldToScreenPos(this.position.x, this.position.y)
-      var targetPos = camera.getWorldToScreenPos(this.target.position.x, this.target.position.y)
+      var pos = { ...this.position }
+      var targetPos = { ...this.target.position }
 
       var bullet = new Bullet(pos)
 
@@ -65,6 +63,7 @@ class Enemy extends CollidableObject {
 
       bullet.setAcc(norm.x * 200, norm.y * 200)
       this.bulletPool.push(bullet)
+      PhysicsControllerSingleton.getInstance().addToPool(BULLET, bullet)
     }
   }
 

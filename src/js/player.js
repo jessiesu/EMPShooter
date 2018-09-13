@@ -1,6 +1,6 @@
 class Player extends CollidableObject {
   constructor(position, life, speed) {
-    var rect = new Rectangle(position.x - (PLAYER_HITBOX / 2), position.y - (PLAYER_HITBOX / 2), PLAYER_HITBOX, PLAYER_HITBOX)
+    var rect = new Rectangle(position.x, position.y, PLAYER_HITBOX, PLAYER_HITBOX)
     super(position, rect, PLAYER, true)
 
     this.startPos = position
@@ -56,9 +56,9 @@ class Player extends CollidableObject {
   }
 
   draw() {
-    var position = {}
-    position.x = player.position.x - HALF_TILE
-    position.y = player.position.y - HALF_TILE
+    var position = { ...this.position }
+    position.x -= HALF_TILE
+    position.y -= HALF_TILE
     position = camera.getWorldToScreenPos(position.x, position.y)
 
     this.sprite.setPosition(position)
@@ -67,8 +67,8 @@ class Player extends CollidableObject {
 
   setInteractedWith(type) {
     super.setInteractedWith(type)
-    if (this.interactedWith == ENEMY && !this.isRecovering) {
-      this.takeDamage()
+    if ((this.interactedWith == ENEMY || this.interactedWith == BULLET) && !this.isRecovering) {
+      playerHit()
     }
   }
 

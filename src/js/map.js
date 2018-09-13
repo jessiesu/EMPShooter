@@ -68,7 +68,7 @@ class Map {
              false
           )
           collidable.setDebugColor('red')
-          physicsController.addToPool(WALL, collidable)
+          PhysicsControllerSingleton.getInstance().addToPool(WALL, collidable)
         }
       }
     }

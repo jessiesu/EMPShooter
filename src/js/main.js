@@ -17,7 +17,6 @@ document.addEventListener("keypress", keyPress)
 document.addEventListener("keydown", keyDown)
 document.addEventListener("keyup", keyUp)
 
-var physicsController = new PhysicsController()
 
 function startGame() {
   // Canvas
@@ -39,12 +38,14 @@ function startGame() {
 
   setInterval(update, 10)
 
-  physicsController.addToPool(PLAYER, player)
-  physicsController.addToPool(ENEMY, enemy)
-  physicsController.setInteraction(PLAYER, WALL)
-  physicsController.setInteraction(PLAYER, ENEMY)
+  PhysicsControllerSingleton.getInstance().addToPool(PLAYER, player)
+  PhysicsControllerSingleton.getInstance().addToPool(ENEMY, enemy)
+  PhysicsControllerSingleton.getInstance().setInteraction(PLAYER, WALL)
+  PhysicsControllerSingleton.getInstance().setInteraction(PLAYER, ENEMY)
+  PhysicsControllerSingleton.getInstance().setInteraction(PLAYER, BULLET)
+  PhysicsControllerSingleton.getInstance().setInteraction(BULLET, WALL)
 
-  setInterval(updatePhysics, 2)
+  setInterval(updatePhysics, 1)
 
   enemy.setTarget(player)
 
@@ -54,16 +55,14 @@ function startGame() {
 function update() {
   camera.update()
 
-  this.hud.setLives(this.player.life)
-
-  if (physicsController.raycastIntersection(enemy, player, WALL)) {
-    console.log('can see player')
-  }
+  // if (physicsController.raycastIntersection(enemy, player, WALL)) {
+  //   console.log('can see player')
+  // }
   draw()
 }
 
 function updatePhysics() {
-  physicsController.update()
+  PhysicsControllerSingleton.getInstance().update()
 }
 
 function draw() {
@@ -75,7 +74,7 @@ function draw() {
   player.draw()
   enemy.draw()
   this.hud.draw()
-  physicsController.draw()
+  PhysicsControllerSingleton.getInstance().draw()
 
   if (gameState == STATE_INTRO) {
   }
@@ -83,6 +82,11 @@ function draw() {
   }
   else if (gameState == STATE_OUTRO) {
   }
+}
+
+function playerHit() {
+  player.takeDamage()
+  this.hud.setLives(this.player.life)
 }
 
 function clamp(num, min, max) {

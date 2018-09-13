@@ -19,6 +19,7 @@ class CollidableObject {
     this.interactionDir = { x: 0, y: 0 }
     this.collisionOffset = ZERO_VECTOR
 
+    this.deleted = false
     this.debugColor = 'green'
 
     this.interactedWith = 'NONE'
@@ -87,6 +88,12 @@ class CollidableObject {
       ctx.strokeStyle=this.debugColor;
 
       ctx.stroke();
+
+      var position = camera.getWorldToScreenPos(this.rectangle.center.x, this.rectangle.center.y)
+
+      ctx.beginPath();
+      ctx.arc(position.x, position.y, BULLET_SIZE, 0, 2 * Math.PI)
+      ctx.stroke()
     }
   }
 

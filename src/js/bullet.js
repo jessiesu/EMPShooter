@@ -8,17 +8,19 @@ class Bullet extends CollidableObject {
   }
 
   draw() {
-    super.draw()
-
-    var position = {}
-    position.x = this.position.x - HALF_TILE
-    position.y = this.position.y - HALF_TILE
-    position = camera.getWorldToScreenPos(position.x, position.y)
+    var position = camera.getWorldToScreenPos(this.position.x, this.position.y)
 
     ctx.beginPath();
-    ctx.arc(100, 75, BULLET_SIZE, 0, 2 * Math.PI)
-    ctx.fillStyle = 'white'
+    ctx.arc(position.x, position.y, BULLET_SIZE, 0, 2 * Math.PI)
+    ctx.fillStyle = 'black'
     ctx.fill()
     ctx.stroke()
+  }
+
+  setInteractedWith(type) {
+    super.setInteractedWith(type)
+    if (this.interactedWith == WALL) {
+      this.deleted = true
+    }
   }
 }

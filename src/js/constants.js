@@ -1,4 +1,4 @@
-var DEBUG = 1
+var DEBUG = 0
 var SCALE = 3
 var TILE = 16
 var HALF_TILE = TILE / 2
@@ -12,7 +12,7 @@ var STATE_PLAY = 2
 var STATE_END = 3
 var STATE_OUTRO = 4
 
-var BULLET_SIZE = 3
+var BULLET_SIZE = 1
 
 // Player
 var PLAYER_STATIC = 0
