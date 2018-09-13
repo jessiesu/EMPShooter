@@ -66,6 +66,9 @@ class CollidableObject {
       var dy = dt * this.velocity.y
       newPos.y += dy
 
+      this.collisionOffset.x = 0
+      this.collisionOffset.y = 0
+
       this.setPosition(newPos)
     }
   }
@@ -153,13 +156,19 @@ class CollidableObject {
     this.interactionDir = direction
   }
 
-  setXInteraction(dir, diff) {
+  setXInteraction(dir) {
     this.interactionDir.x = dir
+  }
+
+  setYInteraction(dir) {
+    this.interactionDir.y = dir
+  }
+
+  setXDiff(diff) {
     this.collisionOffset.x = diff
   }
 
-  setYInteraction(dir, diff) {
-    this.interactionDir.y = dir
+  setYDiff(diff) {
     this.collisionOffset.y = diff
   }
 

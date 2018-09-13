@@ -132,24 +132,28 @@ class PhysicsController {
               if (wy > hx) {
                 if (wy > -hx) {
                   var diff = (r2.bottom - r1.top) + 0.01
-                  physicsObject.setYInteraction(1, diff)
+                  physicsObject.setYInteraction(1)
+                  physicsObject.setYDiff(diff)
                   vCollision = true
                 }
                 else {
                   var diff = (r2.left - r1.right) + 0.01
-                  physicsObject.setXInteraction(1, diff)
+                  physicsObject.setXInteraction(1)
+                  physicsObject.setXDiff(diff)
                   hCollision = true
                 }
               }
               else {
                 if (wy > -hx) {
                   var diff = (r2.right - r1.left) + 0.01
-                  physicsObject.setXInteraction(-1, diff)
+                  physicsObject.setXInteraction(-1)
+                  physicsObject.setXDiff(diff)
                   hCollision = true
                 }
                 else {
                   var diff = (r2.top - r1.bottom) + 0.01
-                  physicsObject.setYInteraction(-1, diff)
+                  physicsObject.setYInteraction(-1)
+                  physicsObject.setYDiff(diff)
                   vCollision = true
                 }
               }
@@ -158,10 +162,10 @@ class PhysicsController {
             }
           })
           if (!hCollision) {
-            physicsObject.setXInteraction(0, 0)
+            physicsObject.setXInteraction(0)
           }
           if (!vCollision) {
-            physicsObject.setYInteraction(0, 0)
+            physicsObject.setYInteraction(0)
           }
           if (!hCollision && !vCollision) {
             physicsObject.setInteractedWith(NONE)
